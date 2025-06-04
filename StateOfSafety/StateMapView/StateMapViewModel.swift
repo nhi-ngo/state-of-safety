@@ -12,7 +12,6 @@ import MapKit
 class StateMapViewModel {
     var states: [StateData] = []
     var cameraPosition: MapCameraPosition
-    var selectedState: StateData?
     
     init() {
         let continentalUSCenter = CLLocationCoordinate2D(latitude: 39.8283, longitude: -98.5795)

@@ -12,6 +12,9 @@ struct StateMapView: View {
     
     @State var viewModel = StateMapViewModel()
     
+    @State var selectedState: StateData?
+    @State var isShowingStateDetailView = false
+        
     var body: some View {
         VStack {
             Map(position: $viewModel.cameraPosition) {
@@ -22,9 +25,24 @@ struct StateMapView: View {
                             .foregroundStyle(.red)
                             .background(Circle().fill(.white.opacity(0.6)).scaleEffect(1.5))
                             .onTapGesture {
-                                viewModel.selectedState = state
+                                selectedState = state
+                                isShowingStateDetailView = true
                             }
                     }
+                }
+            }
+        }
+        .sheet(isPresented: $isShowingStateDetailView) {
+            NavigationStack {
+                if let selectedState = selectedState {
+                    StateDetailView(state: selectedState)
+                        .toolbar {
+                            Button("Dismiss") {
+                                isShowingStateDetailView = false
+                            }
+                        }
+                } else {
+                    Text("Error: No state selected.")
                 }
             }
         }
