@@ -19,10 +19,19 @@ struct StateDetailView: View {
     
     var body: some View {
         
-        VStack {
-            Text(selectedState.name)
+        ScrollView {
+            VStack(alignment: .leading, spacing: 20) {
+                Text("Offense Counts Reported Last 5 Years")
+                    .font(.headline)
+                    .padding(.top, 20)
+                
+                OffenseLineChart(
+                    data: viewModel.chartData
+                )
+            }
         }
-        .navigationTitle(selectedState.name)
+        .padding()
+        .navigationTitle("\(selectedState.name), \(selectedState.abbreviation)")
         .navigationBarTitleDisplayMode(.inline)
         .onAppear {
             viewModel.fetchMonthlyCrimeCounts(offenseCode: "BUR")
@@ -31,11 +40,5 @@ struct StateDetailView: View {
 }
 
 #Preview {
-    StateDetailView(state: StateData(
-        id: 1001,
-        name: "Alabama",
-        abbreviation: "AL",
-        latitude: 32.8067,
-        longitude: -86.7911)
-    )
+    StateDetailView(state: MockData().mockState)
 }
