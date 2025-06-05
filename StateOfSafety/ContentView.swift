@@ -8,9 +8,14 @@
 import SwiftUI
 
 struct ContentView: View {
+    
+    @AppStorage("onboardingCompleted") var onboardingCompleted: Bool = false
+    
     var body: some View {
-        VStack {
+        if onboardingCompleted {
             StateMapView()
+        } else {
+            OnboardingView()
         }
     }
 }

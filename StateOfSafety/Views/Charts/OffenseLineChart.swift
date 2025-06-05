@@ -28,14 +28,14 @@ struct OffenseLineChart: View {
                             x: .value("Month", point.date, unit: .month),
                             y: .value("Count", point.value)
                         )
-                        .foregroundStyle(.cyan)
+                        .foregroundStyle(.accentColor)
                         .interpolationMethod(.catmullRom)
                         
                         PointMark(
                             x: .value("Month", point.date, unit: .month),
                             y: .value("Count", point.value)
                         )
-                        .foregroundStyle(.cyan)
+                        .foregroundStyle(.accentColor)
                         .symbolSize(selectedDate == point.date ? 100 : 30)
                     }
                     
