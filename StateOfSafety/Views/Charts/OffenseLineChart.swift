@@ -28,33 +28,26 @@ struct OffenseLineChart: View {
                             x: .value("Month", point.date, unit: .month),
                             y: .value("Count", point.value)
                         )
-                        .foregroundStyle(.accentColor)
+                        .foregroundStyle(.accent)
                         .interpolationMethod(.catmullRom)
                         
                         PointMark(
                             x: .value("Month", point.date, unit: .month),
                             y: .value("Count", point.value)
                         )
-                        .foregroundStyle(.accentColor)
+                        .foregroundStyle(.accent)
                         .symbolSize(selectedDate == point.date ? 100 : 30)
                     }
                     
-                    if let selectedDate = selectedDate, let value = selectedValue {
+                    if let selectedDate = selectedDate, let selectedValue = selectedValue {
                         RuleMark(x: .value("Selected data point", selectedDate, unit: .month))
                             .foregroundStyle(Color.gray.opacity(0.5))
                             .lineStyle(StrokeStyle(lineWidth: 1, dash: [3, 3]))
                             .annotation(position: .automatic, alignment: .leading, spacing: 2) {
-                                VStack(alignment: .leading, spacing: 3) {
-                                    Text(selectedDate.formatted(Date.FormatStyle().month(.twoDigits).year(.defaultDigits)))
-                                        .font(.caption.bold())
-                                    Text("Count: \(value.formatted(.number.grouping(.automatic)))")
-                                        .font(.caption)
-                                }
-                                .padding(8)
-                                .background(
-                                    RoundedRectangle(cornerRadius: 5).fill(.white)
+                                ChartAnnotationView(
+                                    date: selectedDate,
+                                    value: selectedValue
                                 )
-                                .shadow(radius: 2)
                             }
                     }
                 }
