@@ -45,7 +45,7 @@ struct OffenseLineChart: View {
                                 VStack(alignment: .leading, spacing: 3) {
                                     Text(selectedDate.formatted(Date.FormatStyle().month(.twoDigits).year(.defaultDigits)))
                                         .font(.caption.bold())
-                                    Text("Count: \(String(format: "%.0f", value))")
+                                    Text("Count: \(value.formatted(.number.grouping(.automatic)))")
                                         .font(.caption)
                                 }
                                 .padding(8)
@@ -101,4 +101,5 @@ struct OffenseLineChart: View {
 
 #Preview {
     OffenseLineChart(data: MockData().monthlyCounts)
+        .frame(height: 250)
 }

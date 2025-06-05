@@ -15,7 +15,7 @@ class ChartDataService {
         offenseCode: String,
         stateName: String,
         stateAbbr: String,
-        fromYear: Int = 2019,
+        fromYear: Int = 2021,
         toYear: Int = 2023
     ) async throws -> [MonthlyChartData] {
         
@@ -50,6 +50,71 @@ class ChartDataService {
         }
 
         return chartData.sorted { $0.date < $1.date }
+    }
+    
+    func getArrestDemographicsData(
+        stateAbbr: String,
+        crimeCode: Int,
+        fromYear: Int = 2021,
+        toYear: Int = 2023
+    ) async throws -> (sexData: [BarChartSegment], raceData: [BarChartSegment]) {
+
+        let fromDateString = "01-\(fromYear)"
+        let toDateString = "12-\(toYear)"
+
+        let urlString = "\(baseURL)/arrest/state/\(stateAbbr)/\(crimeCode)?type=totals&from=\(fromDateString)&to=\(toDateString)&API_KEY=\(apiKey)"
+
+        let response: ArrestDemographicsAPIResponse = try await fetchData(fromUrl: urlString)
+
+        var sexData: [BarChartSegment] = []
+        if let sexBreakdown = response.arresteeSex {
+            let sexColors: [String: Color] = [
+                "Male": .blue,
+                "Female": .pink,
+                "Unknown": .gray
+            ]
+            for (sexCategory, count) in sexBreakdown {
+                if count > 0 {
+                    sexData.append(BarChartSegment(
+                        category: sexCategory,
+                        value: Double(count),
+                        color: sexColors[sexCategory] ?? .orange
+                    ))
+                }
+            }
+        } else {
+            print("Warning: No 'Arrestee Sex' data found in arrest demographics response for \(stateAbbr), code \(crimeCode).")
+        }
+
+        var raceData: [BarChartSegment] = []
+        if let raceBreakdown = response.arresteeRace {
+            let raceColors: [String: Color] = [
+                "White": .green,
+                "Black or African American": .purple,
+                "Asian": .yellow,
+                "American Indian or Alaska Native": .teal,
+                "Native Hawaiian or Other Pacific Islander": .mint,
+                "Unknown": .gray,
+                "Multiple": .brown,
+                "Not Specified": .gray.opacity(0.5)
+            ]
+            for (raceCategory, count) in raceBreakdown {
+                if count > 0 {
+                    raceData.append(BarChartSegment(
+                        category: raceCategory,
+                        value: Double(count),
+                        color: raceColors[raceCategory] ?? .indigo
+                    ))
+                }
+            }
+        } else {
+            print("Warning: No 'Arrestee Race' data found in arrest demographics response for \(stateAbbr), code \(crimeCode).")
+        }
+        
+        sexData.sort { $0.category < $1.category }
+        raceData.sort { $0.category < $1.category }
+
+        return (sexData, raceData)
     }
     
     

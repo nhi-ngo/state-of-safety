@@ -28,4 +28,19 @@ struct MockData {
         MonthlyChartData(date: DateComponents(calendar: .current, year: 2023, month: 2, day: 1).date!, value: 150.0, stateName: "Florida"),
         MonthlyChartData(date: DateComponents(calendar: .current, year: 2023, month: 3, day: 1).date!, value: 160.0, stateName: "Florida")
     ]
+    
+    let mockRaceData: [BarChartSegment] = [
+        BarChartSegment(category: "American Indian or Alaska Native", value: 448, color: .teal),
+        BarChartSegment(category: "Asian", value: 100, color: .green),
+        BarChartSegment(category: "Black or African American", value: 1632, color: .orange),
+        BarChartSegment(category: "Native Hawaiian or Other Pacific Islander", value: 50, color: .purple),
+        BarChartSegment(category: "Unknown", value: 100, color: .red),
+        BarChartSegment(category: "White", value: 1843, color: .cyan),
+        BarChartSegment(category: "Not Specified", value: 312, color: .gray)
+    ]
+    
+    let mockSexData: [BarChartSegment] = [
+        BarChartSegment(category: "Male", value: 1211, color: .blue),
+        BarChartSegment(category: "Female", value: 206, color: .pink)
+    ]
 }
