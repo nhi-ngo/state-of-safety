@@ -7,14 +7,6 @@
 
 import SwiftUI
 
-import SwiftUI
-
-struct CrimeType: Identifiable, Hashable {
-    let id = UUID()
-    let name: String
-    let abbr: String
-    let code: Int
-}
 
 let crimeTypes: [CrimeType] = [
     CrimeType(name: "Burglary", abbr: "BUR", code: 60),
@@ -30,7 +22,6 @@ struct CrimeTypePicker: View {
             ForEach(crimeTypes) { crimeType in
                 Text(crimeType.name).tag(crimeType)
             }
-            
         }
         .pickerStyle(.segmented)
     }

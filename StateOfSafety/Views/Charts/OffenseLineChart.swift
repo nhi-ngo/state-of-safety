@@ -18,7 +18,9 @@ struct OffenseLineChart: View {
     var body: some View {
         VStack(alignment: .leading) {
             if data.isEmpty {
-                ProgressView()
+                Text("No data available.")
+                    .foregroundColor(.secondary)
+                    .frame(height: 200, alignment: .center)
             } else {
                 Chart {
                     ForEach(data.sorted { $0.date < $1.date }) { point in
@@ -77,6 +79,11 @@ struct OffenseLineChart: View {
                     }
                 }
                 .frame(minHeight: 250)
+                .onChange(of: data.map { $0.id }) {
+                    print("OffenseLineChart: Data changed, clearing selection.")
+                    selectedDate = nil
+                    selectedValue = nil
+                }
             }
         }
     }
