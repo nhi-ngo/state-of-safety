@@ -41,7 +41,7 @@ struct OffenseLineChart: View {
                     
                     if let selectedDate = selectedDate, let selectedValue = selectedValue {
                         RuleMark(x: .value("Selected data point", selectedDate, unit: .month))
-                            .foregroundStyle(Color.gray.opacity(0.5))
+                            .foregroundStyle(Color.gray.opacity(0.7))
                             .lineStyle(StrokeStyle(lineWidth: 1, dash: [3, 3]))
                             .annotation(position: .automatic, alignment: .leading, spacing: 2) {
                                 ChartAnnotationView(
