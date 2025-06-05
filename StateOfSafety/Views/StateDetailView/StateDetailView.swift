@@ -12,7 +12,6 @@ struct StateDetailView: View {
     let selectedState: StateData
     @State private var viewModel: StateDetailViewModel
     @State private var selectedDemographicType: DemographicsType = .sex
-
     
     init(state: StateData) {
         self.selectedState = state
@@ -34,9 +33,18 @@ struct StateDetailView: View {
                         .padding(.top, 20)
                     
                     // --- Line chart section ---
-                    OffenseLineChart(
-                        data: viewModel.chartData
-                    )
+                    if viewModel.isLoadingLineChart {
+                        ProgressView()
+                            .frame(maxWidth: .infinity, minHeight: 250, alignment: .center)
+                    } else if let errorMsg = viewModel.chartErrorMessage {
+                        Text(errorMsg)
+                            .foregroundColor(.red)
+                            .frame(maxWidth: .infinity, minHeight: 250, alignment: .center)
+                    } else {
+                        OffenseLineChart(
+                            data: viewModel.chartData
+                        )
+                    }
                     
                     // --- Bar chart section ---
                     Text("Arrestee Demographics")
@@ -52,11 +60,13 @@ struct StateDetailView: View {
                     .pickerStyle(.segmented)
                     
                     VStack {
-                        if let errorMsg = viewModel.chartErrorMessage {
+                        if viewModel.isLoadingDemographics {
+                            ProgressView()
+                                .frame(maxWidth: .infinity, minHeight: 250, alignment: .center)
+                        } else if let errorMsg = viewModel.chartErrorMessage {
                             Text(errorMsg)
                                 .foregroundColor(.red)
-                                .padding()
-                                .frame(maxWidth: .infinity, minHeight: 280, alignment: .center)
+                                .frame(maxWidth: .infinity, minHeight: 250, alignment: .center)
                         } else {
                             switch selectedDemographicType {
                             case .sex:

@@ -15,9 +15,11 @@ class StateDetailViewModel {
     
     var chartData: [MonthlyChartData] = []
     var chartErrorMessage: String?
+    var isLoadingLineChart: Bool = false
 
     var arrestSexData: [BarChartSegment] = []
     var arrestRaceData: [BarChartSegment] = []
+    var isLoadingDemographics: Bool = false
     
     init(state: StateData, chartDataService: ChartDataService = ChartDataService()) {
         self.state = state
@@ -30,6 +32,8 @@ class StateDetailViewModel {
     }
     
     func fetchArrestDemographics() {
+        self.isLoadingDemographics = true
+
         Task {
             do {
                 let (sexData, raceData) = try await chartDataService.getArrestDemographicsData(
@@ -39,9 +43,11 @@ class StateDetailViewModel {
                 await MainActor.run {
                     self.arrestSexData = sexData
                     self.arrestRaceData = raceData
+                    self.isLoadingDemographics = false
                 }
             } catch {
                 await MainActor.run {
+                    self.isLoadingDemographics = false
                     self.chartErrorMessage = "Failed to load arrest demographics: \(error.localizedDescription)"
                     print(self.chartErrorMessage!)
                 }
@@ -50,6 +56,8 @@ class StateDetailViewModel {
     }
     
     func fetchMonthlyCrimeCounts(offenseCode: String) {
+        self.isLoadingLineChart = true
+        
         Task {
             do {
                 let data = try await chartDataService.getMonthlyChartData(
@@ -59,9 +67,11 @@ class StateDetailViewModel {
                 )
                 await MainActor.run {
                     self.chartData = data
+                    self.isLoadingLineChart = false
                 }
             } catch {
                 await MainActor.run {
+                    self.isLoadingLineChart = false
                     self.chartErrorMessage = "Failed to load chart data: \(error.localizedDescription)"
                     print(self.chartErrorMessage!)
                 }
